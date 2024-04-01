@@ -1,11 +1,13 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
 
     const [registerError, setRegisterError] = useState('');
     const [success, setSuccess] = useState('');
+    const emailRef = useRef(null);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -25,23 +27,41 @@ const Login = () => {
         else if (!/[A-Z]/.test(password)) {
             setRegisterError('Your password Should be have at least one upper case character')
         }
-        else if (!accepted) {
-            setRegisterError("Please accept terms and condition")
-            return;
-        }
 
 
         // add validation
         signInWithEmailAndPassword(auth, email, password)
             .then(result => {
                 console.log(result.user)
-                setSuccess('User Create Successfully')
+                setSuccess('User Login Successfully')
             })
             .catch(error => {
                 console.error(error)
                 setRegisterError(error.message);
             })
     }
+
+    const handleForgetPassword = () => {
+        const email = emailRef.current.value;
+        if (!email) {
+            console.log('reset', emailRef.current.value)
+            return;
+        }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            console.log('please write a valid email')
+            return;
+        }
+
+        // send validation email
+        sendPasswordResetEmail(auth, email)
+        .then(()=>{
+            alert('please check your email')
+        })
+        .catch(error =>{
+            console.error(error)
+        })
+    }
+
     return (
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row-reverse">
@@ -55,7 +75,13 @@ const Login = () => {
                             <label className="label">
                                 <span className="label-text">Email</span>
                             </label>
-                            <input type="email" name="email" placeholder="email" className="input input-bordered" required />
+                            <input
+                                type="email"
+                                name="email"
+                                ref={emailRef}
+                                placeholder="email"
+                                className="input input-bordered"
+                                required />
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -63,7 +89,7 @@ const Login = () => {
                             </label>
                             <input type="password" name="password" placeholder="password" className="input input-bordered" required />
                             <label className="label">
-                                <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                                <a onClick={handleForgetPassword} href="#" className="label-text-alt link link-hover">Forgot password?</a>
                             </label>
                         </div>
                         <div className="form-control mt-6">
@@ -76,6 +102,7 @@ const Login = () => {
                     {
                         success && <p className='text-green-500'>{success}</p>
                     }
+                    <p>New to this website ? please <Link to='/register'>Register</Link></p>
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import auth from '../../firebase/firebase.config';
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
+import { Link } from 'react-router-dom';
 
 const Register = () => {
 
@@ -80,6 +81,7 @@ const Register = () => {
                 {
                     success && <p className='text-green-500'>{success}</p>
                 }
+                <p>Already have an account ? Please<Link to='/login'>Login</Link></p>
             </div>
         </div>
     );
