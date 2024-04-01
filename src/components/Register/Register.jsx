@@ -47,20 +47,22 @@ const Register = () => {
             <div className="mx-auto md:w-1/2">
                 <h2 className="text-3xl mb-8">Please Register</h2>
                 <form onSubmit={handleRegister}>
-                    <input className='mb-4 w-3/4 py-2 px-4' type="email" name="email" placeholder='Email Address' id="email" required />
+                    <input className='mb-4 w-full py-2 px-4' type="email" name="email" placeholder='Email Address' id="email" required />
                     <br />
-                    <input className='mb-4 w-3/4 py-2 px-4'
-                        type={showPassword ? 'test' : "password"}
-                        name="password"
-                        placeholder='Password'
-                        id="password" required />
-                    <span onClick={() => setShowPassword(!showPassword)}>
-                        {
-                            showPassword ? <IoMdEye /> : <IoMdEyeOff />
-                        }
-                    </span>
+                    <div className='relative'>
+                        <input className=' w-full py-2 px-4'
+                            type={showPassword ? 'test' : "password"}
+                            name="password"
+                            placeholder='Password'
+                            id="password" required />
+                        <span  onClick={() => setShowPassword(!showPassword)} className='absolute top-3 right-2'>
+                            {
+                                showPassword ? <IoMdEye /> : <IoMdEyeOff />
+                            }
+                        </span>
+                    </div>
                     <br />
-                    <input className='btn btn-secondary mb-4 w-3/4' type="submit" value="Register" />
+                    <input className='btn btn-secondary mb-4 w-full' type="submit" value="Register" />
                 </form>
                 {
                     registerError && <p className='text-red-600'>{registerError}</p>
